@@ -35,7 +35,7 @@ vector< tinyobj::material_t > materials2;
 
 
 //global variables to help us do things
-int g_ViewportWidth = 512; int g_ViewportHeight = 512; // Default window size, in pixels
+int g_ViewportWidth = 720; int g_ViewportHeight = 720; // Default window size, in pixels
 double mouse_x, mouse_y; //variables storing mouse position
 const vec3 g_backgroundColor(0.2f, 0.2f, 0.2f); // background colour - a GLM 3-component vector
 
@@ -61,7 +61,7 @@ float cam_pitch = 0.0f;
 
 //you may need to change these variables, depending on your system
 float MOVE_SPEED = 0.00015f;
-float LOOK_SPEED = 0.00005f;
+float LOOK_SPEED = 0.0005f;
 
 
 //global variables used for camera movement
@@ -196,15 +196,19 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		switch (key)
 		{
 		case GLFW_KEY_W:
+			cout << "Pressed up\n";
 			key_flags[0] = 1;
 			break;
 		case GLFW_KEY_A:
+			cout << "Pressed left\n";
 			key_flags[1] = 1;
 			break;
 		case GLFW_KEY_S:
+			cout << "Pressed down\n";
 			key_flags[2] = 1;
 			break;
 		case GLFW_KEY_D:
+			cout << "Pressed right\n";
 			key_flags[3] = 1;
 			break;
 		case GLFW_KEY_R:
@@ -216,23 +220,27 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 			glfwSetWindowShouldClose(window, 1);
 			break;
 		}
-	else if (GLFW_RELEASE)
+	else if (action == GLFW_RELEASE)
+
 		switch (key)
 		{
 		case GLFW_KEY_W:
+			cout << "Released up\n";
 			key_flags[0] = 0;
 			break;
 		case GLFW_KEY_A:
+			cout << "Released left\n";
 			key_flags[1] = 0;
 			break;
 		case GLFW_KEY_S:
+			cout << "Released down\n";
 			key_flags[2] = 0;
 			break;
 		case GLFW_KEY_D:
+			cout << "Released right\n";
 			key_flags[3] = 0;
 			break;
 		}
-
 
 }
 
@@ -322,6 +330,7 @@ int main(void)
 	glfwMakeContextCurrent(window);
 	glewExperimental = GL_TRUE;
 	glewInit();
+	glEnable(GL_DEPTH_TEST);
 
 	//input callbacks
 	glfwSetCursorPosCallback(window, onMouseMove);

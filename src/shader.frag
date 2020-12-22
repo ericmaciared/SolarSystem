@@ -1,16 +1,11 @@
 #version 330
 
+uniform vec3 u_color;
 out vec4 fragColor;
-
 in vec3 v_color;
-
-// STEP 3: get the uv coordinates form the vertex shader
-
 
 void main(void)
 {
-	// STEP 3: use the uv coordinates as colors
-    // STEP 8: get the color from the texture
-	fragColor =  vec4(v_color,1.0);     
-	
+	// We're just going to paint the interpolated colour from the vertex shader
+	fragColor =  vec4(u_color, 1.0);
 }
