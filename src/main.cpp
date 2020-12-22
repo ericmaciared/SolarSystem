@@ -25,7 +25,7 @@ using namespace std;
 using namespace glm;
 
 string basepath = "assets/";
-string inputfile = basepath + "teapot.obj";
+string inputfile = basepath + "sphere.obj";
 vector< tinyobj::shape_t > shapes;
 vector< tinyobj::material_t > materials;
 
