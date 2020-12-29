@@ -20,6 +20,7 @@
 #include <string>
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "tiny_obj_loader.h"
+#include "imageloader.h"
 
 using namespace std;
 using namespace glm;
@@ -29,9 +30,9 @@ string inputfile = basepath + "sphere.obj";
 vector< tinyobj::shape_t > shapes;
 vector< tinyobj::material_t > materials;
 
-string inputfile2 = basepath + "bunny.obj";
+/*string inputfile2 = basepath + "bunny.obj";
 vector< tinyobj::shape_t > shapes2;
-vector< tinyobj::material_t > materials2;
+vector< tinyobj::material_t > materials2;*/
 
 
 //global variables to help us do things
@@ -41,9 +42,9 @@ const vec3 g_backgroundColor(0.2f, 0.2f, 0.2f); // background colour - a GLM 3-c
 
 GLuint g_simpleShader = 0; //shader identifier
 GLuint g_Vao = 0; //vao
-GLuint g_Vao2 = 0; //vao
+//GLuint g_Vao2 = 0; //vao
 GLuint g_NumTriangles = 0; //  Numbre of triangles we are painting.
-GLuint g_NumTriangles2 = 0; //  Numbre of triangles we are painting.
+//GLuint g_NumTriangles2 = 0; //  Numbre of triangles we are painting.
 
 
 float deltaTime = 0.0f;
@@ -63,9 +64,11 @@ float cam_pitch = 0.0f;
 float MOVE_SPEED = 0.00015f;
 float LOOK_SPEED = 0.0005f;
 
-
 //global variables used for camera movement
 int key_flags[] = { 0, 0, 0, 0 }; //w, a, s, d
+
+//global variables for texture
+GLuint texture_id;
 
 // ------------------------------------------------------------------------------------------
 // This function load the meshes to the memory and binds to the VAO
@@ -81,12 +84,11 @@ void load()
 	if (!err.empty()) std::cerr << err << std::endl;
 
 	// Load the mesh - BUNNY
-	bool ret2 = tinyobj::LoadObj(shapes2, materials2, err, inputfile2.c_str(), basepath.c_str());
+	/*bool ret2 = tinyobj::LoadObj(shapes2, materials2, err, inputfile2.c_str(), basepath.c_str());
 
 	//check for errors
 	cout << "# of shapes mesh 2: " << shapes2.size() << endl;
-	if (!err.empty()) std::cerr << err << std::endl;
-
+	if (!err.empty()) std::cerr << err << std::endl;*/
 
 	//load the shader
 	Shader simpleShader("src/shader.vert", "src/shader.frag");
@@ -101,12 +103,19 @@ void load()
 	gl_createIndexBuffer(&(shapes[0].mesh.indices[0]),
 		shapes[0].mesh.indices.size() * sizeof(unsigned int));
 
+	gl_createAndBindAttribute(
+		&(shapes[0].mesh.texcoords[0]),
+		shapes[0].mesh.texcoords.size() * sizeof(GLfloat),
+		g_simpleShader,
+		"a_uv", 2);
+
+
 	gl_unbindVAO();
 	g_NumTriangles = shapes[0].mesh.indices.size() / 3;
 
 
 	// Create the VAO where we store all geometry (stored in g_Vao)
-	g_Vao2 = gl_createAndBindVAO();
+	/*g_Vao2 = gl_createAndBindVAO();
 
 	//create vertex buffer for positions, colors, and indices, and bind them to shader
 	gl_createAndBindAttribute(&(shapes2[0].mesh.positions[0]),
@@ -115,7 +124,22 @@ void load()
 		shapes2[0].mesh.indices.size() * sizeof(unsigned int));
 
 	gl_unbindVAO();
-	g_NumTriangles2 = shapes2[0].mesh.indices.size() / 3;
+	g_NumTriangles2 = shapes2[0].mesh.indices.size() / 3;*/
+
+	Image* image = loadBMP("assets/earthmap.bmp");
+	glGenTextures(1, &texture_id);
+	glBindTexture(GL_TEXTURE_2D, texture_id);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, // target
+		0, // level = 0 base, no mipmap
+		GL_RGB, // how the data will be stored
+		image->width, // width of the image
+		image->height, // height of the image
+		0, //border
+		GL_RGB, // format of original data
+		GL_UNSIGNED_BYTE, // type of data
+		image->pixels); // pointer to the start of data
+
 
 }
 
@@ -126,6 +150,9 @@ void draw()
 {
 	//clear the screen
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glEnable(GL_DEPTH_TEST),
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 
 	// activate shader
 	glUseProgram(g_simpleShader);
@@ -166,13 +193,20 @@ void draw()
 	mat4 model = T * R * S;
 	glUniformMatrix4fv(model_loc, 1, GL_FALSE, glm::value_ptr(model));
 
+	//find the sample uniform in the shader
+	GLuint u_texture = glGetUniformLocation(g_simpleShader, "u_texture");
+	// bind the sampler to the texture unit 0
+	glUniform1i(u_texture, 0);
+	// activate texture unit 0 and bin the texture object
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture_id);
 
 	// Draw to screen - TEAPOT
 	glDrawElements(GL_TRIANGLES, 3 * g_NumTriangles, GL_UNSIGNED_INT, 0);
 	gl_unbindVAO();
 
 	// MODEL MATRIX 2 - BUNNY
-	mat4 T2 = translate(mat4(1.0f), vec3(-0.5, -0.5, -1.5));
+	/*mat4 T2 = translate(mat4(1.0f), vec3(-0.5, -0.5, -1.5));
 	mat4 R2 = rotate(mat4(1.0f), 0.0f, vec3(0.0, 0.0, 1.0));
 	mat4 S2 = scale(mat4(1.0f), vec3(6.0, 6.0, 6.0));
 	mat4 model2 = T2 * R2 * S2;
@@ -183,7 +217,7 @@ void draw()
 	// Draw to screen - BUNNY
 	gl_bindVAO(g_Vao2);
 	glDrawElements(GL_TRIANGLES, 3 * g_NumTriangles2, GL_UNSIGNED_INT, 0);
-	gl_unbindVAO();
+	gl_unbindVAO();*/
 
 }
 
@@ -330,7 +364,6 @@ int main(void)
 	glfwMakeContextCurrent(window);
 	glewExperimental = GL_TRUE;
 	glewInit();
-	glEnable(GL_DEPTH_TEST);
 
 	//input callbacks
 	glfwSetCursorPosCallback(window, onMouseMove);

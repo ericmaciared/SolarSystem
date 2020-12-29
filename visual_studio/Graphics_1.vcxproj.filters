@@ -27,6 +27,9 @@
     <ClInclude Include="..\src\Shader.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\imageloader.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp">
@@ -36,6 +39,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Shader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imageloader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
