@@ -6,6 +6,9 @@ in vec3 a_color;
 in vec2 a_uv;
 out vec2 v_uv;
 
+in vec3 a_normal;
+out vec3 v_normal;
+
 uniform mat4 u_model;
 uniform mat4 u_projection;
 uniform mat4 u_view;
@@ -22,6 +25,7 @@ void main()
 	
 	// pass the uv coordinates to the fragment shader
 	v_uv = a_uv;
+	v_normal = a_normal;
 
 }
 

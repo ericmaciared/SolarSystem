@@ -70,6 +70,10 @@ int key_flags[] = { 0, 0, 0, 0 }; //w, a, s, d
 //global variables for texture
 GLuint texture_id;
 
+//global light source vector
+vec3 g_light_dir(10.0, 10.0, 10.0);
+
+
 // ------------------------------------------------------------------------------------------
 // This function load the meshes to the memory and binds to the VAO
 // ------------------------------------------------------------------------------------------
@@ -102,13 +106,13 @@ void load()
 		shapes[0].mesh.positions.size() * sizeof(float), g_simpleShader, "a_vertex", 3);
 	gl_createIndexBuffer(&(shapes[0].mesh.indices[0]),
 		shapes[0].mesh.indices.size() * sizeof(unsigned int));
-
 	gl_createAndBindAttribute(
 		&(shapes[0].mesh.texcoords[0]),
 		shapes[0].mesh.texcoords.size() * sizeof(GLfloat),
 		g_simpleShader,
 		"a_uv", 2);
-
+	gl_createAndBindAttribute(&(shapes[0].mesh.normals[0]),
+		shapes[0].mesh.normals.size() * sizeof(float), g_simpleShader, "a_normal", 3);
 
 	gl_unbindVAO();
 	g_NumTriangles = shapes[0].mesh.indices.size() / 3;
@@ -200,6 +204,9 @@ void draw()
 	// activate texture unit 0 and bin the texture object
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture_id);
+
+	GLuint light_loc = glGetUniformLocation(g_simpleShader, "u_light_dir");
+	glUniform3f(light_loc, g_light_dir.x, g_light_dir.y, g_light_dir.z);
 
 	// Draw to screen - TEAPOT
 	glDrawElements(GL_TRIANGLES, 3 * g_NumTriangles, GL_UNSIGNED_INT, 0);
