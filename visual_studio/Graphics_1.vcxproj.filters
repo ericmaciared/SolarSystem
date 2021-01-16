@@ -52,5 +52,17 @@
     <None Include="..\src\shader.vert">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="..\src\shader_skybox.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\src\shader_skybox.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\src\shader_earth.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\src\shader_earth.vert">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

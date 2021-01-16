@@ -1,7 +1,10 @@
 /*  by Alun Evans 2016 LaSalle (aevanss@salle.url.edu)
-	edited by Conrado Ruiz 2020 LaSalle (conrado.ruiz@salle.url.edu) */
+	edited by Conrado Ruiz 2020 LaSalle (conrado.ruiz@salle.url.edu) 
+	edited by Eric Macià 2020 LaSalle (eric.macia@students.salle.url.edu)
+			  Guillermo Sabaté 2020 LaSalle (guillermo.sabate@students.salle.edu)
+*/
 
-	//include some standard libraries
+//include some standard libraries
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
@@ -22,17 +25,24 @@
 #include "tiny_obj_loader.h"
 #include "imageloader.h"
 
+enum {
+	SUN, MERCURY, VENUS, MOON, MARS, JUPITER, SATURN, URANUS, NEPTUNE, PLUTO, PLANETS
+};
+
 using namespace std;
 using namespace glm;
 
 string basepath = "assets/";
 string inputfile = basepath + "sphere.obj";
+
 vector< tinyobj::shape_t > shapes;
 vector< tinyobj::material_t > materials;
 
-/*string inputfile2 = basepath + "bunny.obj";
-vector< tinyobj::shape_t > shapes2;
-vector< tinyobj::material_t > materials2;*/
+vector< tinyobj::shape_t > skyboxShapes;
+vector< tinyobj::material_t > skyboxMaterials;
+
+vector< tinyobj::shape_t > earthShapes;
+vector< tinyobj::material_t > earthMaterials;
 
 
 //global variables to help us do things
@@ -41,11 +51,16 @@ double mouse_x, mouse_y; //variables storing mouse position
 const vec3 g_backgroundColor(0.2f, 0.2f, 0.2f); // background colour - a GLM 3-component vector
 
 GLuint g_simpleShader = 0; //shader identifier
-GLuint g_Vao = 0; //vao
-//GLuint g_Vao2 = 0; //vao
-GLuint g_NumTriangles = 0; //  Numbre of triangles we are painting.
-//GLuint g_NumTriangles2 = 0; //  Numbre of triangles we are painting.
+GLuint g_skyboxShader = 0; //skybox shader identifier
+GLuint g_earthShader = 0; //earth shader identifier
 
+GLuint g_Vao = 0; //vao
+GLuint g_Vao_skybox = 0; //vao for skybox
+GLuint g_Vao_earth = 0; //vao for earth
+
+GLuint g_NumTriangles = 0; //  Numbre of triangles we are painting.
+GLuint g_NumTriangles_skybox = 0; //  Numbre of triangles we are painting.
+GLuint g_NumTriangles_earth = 0; //Number of triangles we are painting.
 
 float deltaTime = 0.0f;
 float lastTime = 0.0f;
@@ -69,81 +84,200 @@ int key_flags[] = { 0, 0, 0, 0 }; //w, a, s, d
 
 //global variables for texture
 GLuint texture_id;
+GLuint texture_id_skybox;
+GLuint texture_id_earth;
 
 //global light source vector
-vec3 g_light_dir(10.0, 10.0, 10.0);
+vec3 g_light_dir(10.0f, 0.0f, 10.0f);
+float g_light_distance = 10.0f;
+float g_light_angle = 45.0f;
 
+
+void loadSkybox() {
+	// Load the mesh - SKYBOX
+	string err;
+	bool ret = tinyobj::LoadObj(skyboxShapes, skyboxMaterials, err, inputfile.c_str(), basepath.c_str());
+
+	//check for errors
+	cout << "# of shapes mesh 1: " << skyboxShapes.size() << endl;
+	if (!err.empty()) std::cerr << err << std::endl;
+	
+	Shader skyboxShader("src/shader_skybox.vert", "src/shader_skybox.frag");
+	g_skyboxShader = skyboxShader.program;
+
+	g_Vao_skybox = gl_createAndBindVAO();
+	gl_createAndBindAttribute(&(skyboxShapes[0].mesh.positions[0]),
+		skyboxShapes[0].mesh.positions.size() * sizeof(float),
+		g_skyboxShader,
+		"a_vertex",
+		3);
+
+	gl_createIndexBuffer(&(skyboxShapes[0].mesh.indices[0]),
+		skyboxShapes[0].mesh.indices.size() * sizeof(unsigned int));
+
+	gl_createAndBindAttribute(&(skyboxShapes[0].mesh.texcoords[0]),
+		skyboxShapes[0].mesh.texcoords.size() * sizeof(GLfloat),
+		g_skyboxShader,
+		"a_uv",
+		2);
+
+	gl_unbindVAO();
+	g_NumTriangles_skybox = skyboxShapes[0].mesh.indices.size() / 3;
+
+	Image* image = loadBMP("assets/milkyway.bmp");
+
+	glGenTextures(1, &(texture_id_skybox));
+	glBindTexture(GL_TEXTURE_2D, texture_id_skybox);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+	glTexImage2D(GL_TEXTURE_2D,
+		0,
+		GL_RGB,
+		image->width,
+		image->height,
+		0,
+		GL_RGB,
+		GL_UNSIGNED_BYTE,
+		image->pixels);
+}
+
+void loadEarth() {
+	// Load the mesh - SKYBOX
+	string err;
+	bool ret = tinyobj::LoadObj(earthShapes, earthMaterials, err, inputfile.c_str(), basepath.c_str());
+
+	//check for errors
+	cout << "# of shapes mesh 1: " << earthShapes.size() << endl;
+	if (!err.empty()) std::cerr << err << std::endl;
+
+	Shader earthShader("src/shader_earth.vert", "src/shader_earth.frag");
+	g_earthShader = earthShader.program;
+
+	g_Vao_earth = gl_createAndBindVAO();
+
+	gl_createAndBindAttribute(&(earthShapes[0].mesh.positions[0]), earthShapes[0].mesh.positions.size() * sizeof(float),
+		g_earthShader, "a_vertex", 3);
+
+	gl_createIndexBuffer(&(earthShapes[0].mesh.indices[0]), earthShapes[0].mesh.indices.size() * sizeof(unsigned int));
+
+	gl_createAndBindAttribute(&(earthShapes[0].mesh.texcoords[0]), earthShapes[0].mesh.texcoords.size() * sizeof(GLfloat), 
+		g_earthShader, "a_uv", 2);
+
+	gl_createAndBindAttribute(&(earthShapes[0].mesh.normals[0]), earthShapes[0].mesh.normals.size() * sizeof(float),
+		g_earthShader, "a_normal", 3);
+
+
+	gl_unbindVAO();
+	g_NumTriangles_earth = earthShapes[0].mesh.indices.size() / 3;
+
+	Image* image = loadBMP("assets/earthmap.bmp");
+
+	glGenTextures(1, &(texture_id_earth));
+	glBindTexture(GL_TEXTURE_2D, texture_id_earth);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+	glTexImage2D(GL_TEXTURE_2D,
+		0,
+		GL_RGB,
+		image->width,
+		image->height,
+		0,
+		GL_RGB,
+		GL_UNSIGNED_BYTE,
+		image->pixels);
+}
 
 // ------------------------------------------------------------------------------------------
 // This function load the meshes to the memory and binds to the VAO
 // ------------------------------------------------------------------------------------------
 void load()
 {
-	// Load the mesh - TEAPOT
-	string err;
-	bool ret = tinyobj::LoadObj(shapes, materials, err, inputfile.c_str(), basepath.c_str());
+	loadSkybox();
+	loadEarth();
 
-	//check for errors
-	cout << "# of shapes mesh 1: " << shapes.size() << endl;
-	if (!err.empty()) std::cerr << err << std::endl;
+}
 
-	// Load the mesh - BUNNY
-	/*bool ret2 = tinyobj::LoadObj(shapes2, materials2, err, inputfile2.c_str(), basepath.c_str());
+void drawSkybox() {
+	glDisable(GL_DEPTH_TEST);
+	glCullFace(GL_FRONT);
 
-	//check for errors
-	cout << "# of shapes mesh 2: " << shapes2.size() << endl;
-	if (!err.empty()) std::cerr << err << std::endl;*/
+	glUseProgram(g_skyboxShader);
+	gl_bindVAO(g_Vao_skybox);
 
-	//load the shader
-	Shader simpleShader("src/shader.vert", "src/shader.frag");
-	g_simpleShader = simpleShader.program;
+	GLuint u_model = glGetUniformLocation(g_skyboxShader, "u_model");
+	GLuint u_view = glGetUniformLocation(g_skyboxShader, "u_view");
+	GLuint u_projection = glGetUniformLocation(g_skyboxShader, "u_projection");
 
-	// Create the VAO where we store all geometry (stored in g_Vao)
-	g_Vao = gl_createAndBindVAO();
+	//set MVP
+	mat4 model_matrix = translate(scale(mat4(1.0f), vec3(12, 12, 12)), vec3(0, 0, 0));
+	mat4 view_matrix = lookAt(eye, center, vec3(0, 1, 0));
+	mat4 projection_matrix = perspective(
+		90.0f,
+		(float)(g_ViewportWidth / g_ViewportHeight),
+		0.1f, 
+		50.0f
+	);
 
-	//create vertex buffer for positions, colors, and indices, and bind them to shader
-	gl_createAndBindAttribute(&(shapes[0].mesh.positions[0]),
-		shapes[0].mesh.positions.size() * sizeof(float), g_simpleShader, "a_vertex", 3);
-	gl_createIndexBuffer(&(shapes[0].mesh.indices[0]),
-		shapes[0].mesh.indices.size() * sizeof(unsigned int));
-	gl_createAndBindAttribute(
-		&(shapes[0].mesh.texcoords[0]),
-		shapes[0].mesh.texcoords.size() * sizeof(GLfloat),
-		g_simpleShader,
-		"a_uv", 2);
-	gl_createAndBindAttribute(&(shapes[0].mesh.normals[0]),
-		shapes[0].mesh.normals.size() * sizeof(float), g_simpleShader, "a_normal", 3);
+	//send all values to shader
+	glUniformMatrix4fv(u_model, 1, GL_FALSE, glm::value_ptr(model_matrix));
+	glUniformMatrix4fv(u_view, 1, GL_FALSE, glm::value_ptr(view_matrix));
+	glUniformMatrix4fv(u_projection, 1, GL_FALSE, glm::value_ptr(projection_matrix));
 
+
+	GLuint u_texture = glGetUniformLocation(g_skyboxShader, "u_texture");
+	glUniform1i(u_texture, 0);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture_id_skybox);
+	glDrawElements(GL_TRIANGLES, 3 * g_NumTriangles_skybox, GL_UNSIGNED_INT, 0);
 	gl_unbindVAO();
-	g_NumTriangles = shapes[0].mesh.indices.size() / 3;
+
+}
+
+void drawEarth() {
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glCullFace(GL_BACK);
+
+	glUseProgram(g_earthShader);
+	gl_bindVAO(g_Vao_earth);
 
 
-	// Create the VAO where we store all geometry (stored in g_Vao)
-	/*g_Vao2 = gl_createAndBindVAO();
+	GLuint u_model = glGetUniformLocation(g_earthShader, "u_model");
+	GLuint u_view = glGetUniformLocation(g_earthShader, "u_view");
+	GLuint u_projection = glGetUniformLocation(g_earthShader, "u_projection");
+	GLuint u_texture = glGetUniformLocation(g_earthShader, "u_texture");
+	GLuint u_light_dir = glGetUniformLocation(g_earthShader, "u_light_dir");
+	GLuint u_cam_pos = glGetUniformLocation(g_earthShader, "u_cam_pos");
+	GLuint u_shininess = glGetUniformLocation(g_earthShader, "u_shininess");
+	GLuint u_ambient = glGetUniformLocation(g_earthShader, "u_ambient");
+	GLuint u_diffuse = glGetUniformLocation(g_earthShader, "u_diffuse");
+	GLuint u_specular = glGetUniformLocation(g_earthShader, "u_specular");
 
-	//create vertex buffer for positions, colors, and indices, and bind them to shader
-	gl_createAndBindAttribute(&(shapes2[0].mesh.positions[0]),
-		shapes2[0].mesh.positions.size() * sizeof(float), g_simpleShader, "a_vertex", 3);
-	gl_createIndexBuffer(&(shapes2[0].mesh.indices[0]),
-		shapes2[0].mesh.indices.size() * sizeof(unsigned int));
+	mat4 model_matrix = translate(mat4(1.0f), vec3(0, 0, -3)) * scale(mat4(1.0f), vec3(1.0, 1.0, 1.0));
+	mat4 view_matrix = lookAt(eye, center, vec3(0, 1, 0));
+	mat4 projection_matrix = perspective(60.0f, (float)(g_ViewportWidth / g_ViewportHeight), 0.1f, 50.0f);
 
+	float light_x = g_light_distance * sinf(g_light_angle);
+	float light_z = g_light_distance * cosf(g_light_angle);
+
+	glUniformMatrix4fv(u_model, 1, GL_FALSE, value_ptr(model_matrix));
+	glUniformMatrix4fv(u_view, 1, GL_FALSE, value_ptr(view_matrix));
+	glUniformMatrix4fv(u_projection, 1, GL_FALSE, value_ptr(projection_matrix));
+	glUniform1i(u_texture, 0);
+	glUniform3f(u_light_dir, g_light_dir.x, g_light_dir.y, g_light_dir.z);
+	glUniform3f(u_diffuse, 1.0, 1.0, 1.0);
+	glUniform3f(u_specular, 1.0, 1.0, 1.0);
+	glUniform3f(u_cam_pos, eye.x, eye.y, eye.z);
+	glUniform1f(u_shininess, 30.0);
+	glUniform3f(u_ambient, 0.0, 0.0, 0.2);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture_id_earth);
+
+	glDrawElements(GL_TRIANGLES, 3 * g_NumTriangles_earth, GL_UNSIGNED_INT, 0);
 	gl_unbindVAO();
-	g_NumTriangles2 = shapes2[0].mesh.indices.size() / 3;*/
-
-	Image* image = loadBMP("assets/earthmap.bmp");
-	glGenTextures(1, &texture_id);
-	glBindTexture(GL_TEXTURE_2D, texture_id);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexImage2D(GL_TEXTURE_2D, // target
-		0, // level = 0 base, no mipmap
-		GL_RGB, // how the data will be stored
-		image->width, // width of the image
-		image->height, // height of the image
-		0, //border
-		GL_RGB, // format of original data
-		GL_UNSIGNED_BYTE, // type of data
-		image->pixels); // pointer to the start of data
-
 
 }
 
@@ -154,77 +288,10 @@ void draw()
 {
 	//clear the screen
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glEnable(GL_DEPTH_TEST),
 	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
 
-	// activate shader
-	glUseProgram(g_simpleShader);
-
-	//bind the geometry
-	gl_bindVAO(g_Vao);
-
-	GLuint colorLoc = glGetUniformLocation(g_simpleShader, "u_color");
-	glUniform3f(colorLoc, 0.0, 1.0, 0.0);
-
-
-	// PROJECTION MATRIX
-	GLuint projection_loc = glGetUniformLocation(g_simpleShader, "u_projection");
-	mat4 projection_matrix = perspective(
-		90.0f, // Field of view
-		1.0f,  // Aspect ratio
-		0.1f,  // near plane (distance from camera)
-		50.0f  // Far plane (distance from camera)
-	);
-	glUniformMatrix4fv(projection_loc, 1, GL_FALSE, glm::value_ptr(projection_matrix));
-
-
-	// VIEW MATRIX
-	vec3 up = vec3(0.0f, 1.0f, 0.0f);
-	mat4 view_matrix = glm::lookAt(
-		eye, 		// the position of your camera, in world space
-		center,   	// where you want to look at, in world space
-		up       	// probably glm::vec3(0,1,0)
-	);
-	GLuint view_loc = glGetUniformLocation(g_simpleShader, "u_view");
-	glUniformMatrix4fv(view_loc, 1, GL_FALSE, glm::value_ptr(view_matrix));
-
-	// MODEL MATRIX 1 - TEAPOT
-	GLuint model_loc = glGetUniformLocation(g_simpleShader, "u_model");
-	mat4 T = translate(mat4(1.0f), vec3(0.0, 0.0, -2.0));
-	mat4 R = rotate(mat4(1.0f), 45.0f, vec3(0.0, 1.0, 0.0));
-	mat4 S = scale(mat4(1.0f), vec3(1.0, 1.0, 1.0));
-	mat4 model = T * R * S;
-	glUniformMatrix4fv(model_loc, 1, GL_FALSE, glm::value_ptr(model));
-
-	//find the sample uniform in the shader
-	GLuint u_texture = glGetUniformLocation(g_simpleShader, "u_texture");
-	// bind the sampler to the texture unit 0
-	glUniform1i(u_texture, 0);
-	// activate texture unit 0 and bin the texture object
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture_id);
-
-	GLuint light_loc = glGetUniformLocation(g_simpleShader, "u_light_dir");
-	glUniform3f(light_loc, g_light_dir.x, g_light_dir.y, g_light_dir.z);
-
-	// Draw to screen - TEAPOT
-	glDrawElements(GL_TRIANGLES, 3 * g_NumTriangles, GL_UNSIGNED_INT, 0);
-	gl_unbindVAO();
-
-	// MODEL MATRIX 2 - BUNNY
-	/*mat4 T2 = translate(mat4(1.0f), vec3(-0.5, -0.5, -1.5));
-	mat4 R2 = rotate(mat4(1.0f), 0.0f, vec3(0.0, 0.0, 1.0));
-	mat4 S2 = scale(mat4(1.0f), vec3(6.0, 6.0, 6.0));
-	mat4 model2 = T2 * R2 * S2;
-
-	glUniform3f(colorLoc, 1.0, 0.0, 0.0);
-	glUniformMatrix4fv(model_loc, 1, GL_FALSE, glm::value_ptr(model2));
-
-	// Draw to screen - BUNNY
-	gl_bindVAO(g_Vao2);
-	glDrawElements(GL_TRIANGLES, 3 * g_NumTriangles2, GL_UNSIGNED_INT, 0);
-	gl_unbindVAO();*/
+	drawSkybox();
+	drawEarth();
 
 }
 
@@ -237,19 +304,15 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		switch (key)
 		{
 		case GLFW_KEY_W:
-			cout << "Pressed up\n";
 			key_flags[0] = 1;
 			break;
 		case GLFW_KEY_A:
-			cout << "Pressed left\n";
 			key_flags[1] = 1;
 			break;
 		case GLFW_KEY_S:
-			cout << "Pressed down\n";
 			key_flags[2] = 1;
 			break;
 		case GLFW_KEY_D:
-			cout << "Pressed right\n";
 			key_flags[3] = 1;
 			break;
 		case GLFW_KEY_R:
@@ -266,19 +329,15 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		switch (key)
 		{
 		case GLFW_KEY_W:
-			cout << "Released up\n";
 			key_flags[0] = 0;
 			break;
 		case GLFW_KEY_A:
-			cout << "Released left\n";
 			key_flags[1] = 0;
 			break;
 		case GLFW_KEY_S:
-			cout << "Released down\n";
 			key_flags[2] = 0;
 			break;
 		case GLFW_KEY_D:
-			cout << "Released right\n";
 			key_flags[3] = 0;
 			break;
 		}
