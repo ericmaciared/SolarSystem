@@ -64,5 +64,17 @@
     <None Include="..\src\shader_earth.vert">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="..\src\shader_planet.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\src\shader_planet.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\src\shader_sun.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\src\shader_sun.vert">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

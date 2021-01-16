@@ -165,8 +165,12 @@
     <None Include="..\src\shader.vert" />
     <None Include="..\src\shader_earth.frag" />
     <None Include="..\src\shader_earth.vert" />
+    <None Include="..\src\shader_planet.frag" />
+    <None Include="..\src\shader_planet.vert" />
     <None Include="..\src\shader_skybox.frag" />
     <None Include="..\src\shader_skybox.vert" />
+    <None Include="..\src\shader_sun.frag" />
+    <None Include="..\src\shader_sun.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

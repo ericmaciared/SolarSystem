@@ -77,14 +77,10 @@ void main(void)
 	vec3 diff = texture_color * NdotL * u_diffuse;
 	vec3 spec = texture_color * u_specular * RdotE; 
 
-	vec3 final_color; 
+	vec3 final_color;
 
-	if (NdotL < 0.001) {
-		final_color = texture_night;
-	}
-	else {
-		final_color = amb + diff + spec * texture_spec;
-	}
+	final_color = amb + diff + spec * texture_spec;
+	
 
 	fragColor = vec4 (final_color, 1.0);
 

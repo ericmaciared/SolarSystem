@@ -1,21 +1,41 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(491,5): warning MSB8028: El directorio intermedio (x64\Debug\) contiene archivos compartidos de otro proyecto (Graphics_1.vcxproj). Esto puede dar lugar a un comportamiento incorrecto de limpieza y recompilación.
   main.cpp
-C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(117,4): warning C4267: 'argumento': conversión de 'size_t' a 'int'; posible pérdida de datos
-C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(120,61): warning C4267: 'argumento': conversión de 'size_t' a 'int'; posible pérdida de datos
-C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(126,4): warning C4267: 'argumento': conversión de 'size_t' a 'int'; posible pérdida de datos
-C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(129,65): warning C4267: '=': conversión de 'size_t' a 'GLuint'; posible pérdida de datos
-C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(164,31): warning C4267: 'argumento': conversión de 'size_t' a 'int'; posible pérdida de datos
-C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(166,115): warning C4267: 'argumento': conversión de 'size_t' a 'int'; posible pérdida de datos
-C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(169,27): warning C4267: 'argumento': conversión de 'size_t' a 'int'; posible pérdida de datos
-C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(172,31): warning C4267: 'argumento': conversión de 'size_t' a 'int'; posible pérdida de datos
-C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(176,63): warning C4267: '=': conversión de 'size_t' a 'GLuint'; posible pérdida de datos
-C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(327,38): warning C4305: 'argumento': truncamiento de 'double' a 'GLfloat'
-C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(426,57): warning C4244: '+=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(427,59): warning C4244: '+=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(430,17): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(431,17): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(455,41): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(456,24): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(35,60): warning C4305: 'inicializando': truncamiento de 'double' a '_Ty'
+          with
+          [
+              _Ty=float
+          ]
+C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(36,62): warning C4305: 'inicializando': truncamiento de 'double' a '_Ty'
+          with
+          [
+              _Ty=float
+          ]
+C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(140,4): warning C4267: 'argumento': conversión de 'size_t' a 'int'; posible pérdida de datos
+C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(143,61): warning C4267: 'argumento': conversión de 'size_t' a 'int'; posible pérdida de datos
+C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(149,4): warning C4267: 'argumento': conversión de 'size_t' a 'int'; posible pérdida de datos
+C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(152,65): warning C4267: '=': conversión de 'size_t' a 'GLuint'; posible pérdida de datos
+C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(187,31): warning C4267: 'argumento': conversión de 'size_t' a 'int'; posible pérdida de datos
+C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(189,115): warning C4267: 'argumento': conversión de 'size_t' a 'int'; posible pérdida de datos
+C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(192,27): warning C4267: 'argumento': conversión de 'size_t' a 'int'; posible pérdida de datos
+C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(195,31): warning C4267: 'argumento': conversión de 'size_t' a 'int'; posible pérdida de datos
+C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(199,63): warning C4267: '=': conversión de 'size_t' a 'GLuint'; posible pérdida de datos
+C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(278,138): warning C4267: 'argumento': conversión de 'size_t' a 'int'; posible pérdida de datos
+C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(279,136): warning C4267: 'argumento': conversión de 'size_t' a 'int'; posible pérdida de datos
+C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(280,134): warning C4267: 'argumento': conversión de 'size_t' a 'int'; posible pérdida de datos
+C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(281,105): warning C4267: 'argumento': conversión de 'size_t' a 'int'; posible pérdida de datos
+C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(285,52): warning C4267: '=': conversión de 'size_t' a 'GLuint'; posible pérdida de datos
+C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(310,54): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(311,41): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(317,34): warning C4244: '=': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(318,38): warning C4244: '=': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(432,38): warning C4305: 'argumento': truncamiento de 'double' a 'GLfloat'
+C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(497,41): warning C4305: 'argumento': truncamiento de 'double' a 'GLfloat'
+C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(643,57): warning C4244: '+=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(644,59): warning C4244: '+=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(647,17): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(648,17): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(659,41): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\Eric Macià\Desktop\SolarSystem\src\main.cpp(660,24): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
   GLM: perspective function taking degrees as a parameter is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
   GLM: rotate function taking degrees as a parameter is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
   Graphics_1.vcxproj -> C:\Users\Eric Macià\Desktop\SolarSystem\visual_studio\..\SolarSystem.exe
