@@ -86,6 +86,10 @@ int key_flags[] = { 0, 0, 0, 0 }; //w, a, s, d
 GLuint texture_id;
 GLuint texture_id_skybox;
 GLuint texture_id_earth;
+GLuint texture_id_earth_normal;
+GLuint texture_id_earth_spec;
+GLuint texture_id_earth_night;
+
 
 //global light source vector
 vec3 g_light_dir(10.0f, 0.0f, 10.0f);
@@ -175,9 +179,7 @@ void loadEarth() {
 
 	glGenTextures(1, &(texture_id_earth));
 	glBindTexture(GL_TEXTURE_2D, texture_id_earth);
-
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
 	glTexImage2D(GL_TEXTURE_2D,
 		0,
 		GL_RGB,
@@ -187,6 +189,51 @@ void loadEarth() {
 		GL_RGB,
 		GL_UNSIGNED_BYTE,
 		image->pixels);
+
+	Image* image_normal = loadBMP("assets/earthnormal.bmp");
+
+	glGenTextures(1, &(texture_id_earth_normal));
+	glBindTexture(GL_TEXTURE_2D, texture_id_earth_normal);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D,
+		0,
+		GL_RGB,
+		image_normal->width,
+		image_normal->height,
+		0,
+		GL_RGB,
+		GL_UNSIGNED_BYTE,
+		image_normal->pixels);
+
+	Image* image_spec = loadBMP("assets/earthspec.bmp");
+
+	glGenTextures(1, &(texture_id_earth_spec));
+	glBindTexture(GL_TEXTURE_2D, texture_id_earth_spec);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D,
+		0,
+		GL_RGB,
+		image_spec->width,
+		image_spec->height,
+		0,
+		GL_RGB,
+		GL_UNSIGNED_BYTE,
+		image_spec->pixels);
+
+	Image* image_night = loadBMP("assets/earthnight.bmp");
+
+	glGenTextures(1, &texture_id_earth_night);
+	glBindTexture(GL_TEXTURE_2D, texture_id_earth_night);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, // target
+		0, // level = 0 base, no mipmap
+		GL_RGB, // how the data will be stored
+		image_night->width, // width of the image
+		image_night->height, // height of the image
+		0, //border
+		GL_RGB, // format of original data
+		GL_UNSIGNED_BYTE, // type of data
+		image_night->pixels); // pointer to the start of data
 }
 
 // ------------------------------------------------------------------------------------------
@@ -225,9 +272,9 @@ void drawSkybox() {
 	glUniformMatrix4fv(u_view, 1, GL_FALSE, glm::value_ptr(view_matrix));
 	glUniformMatrix4fv(u_projection, 1, GL_FALSE, glm::value_ptr(projection_matrix));
 
-
 	GLuint u_texture = glGetUniformLocation(g_skyboxShader, "u_texture");
 	glUniform1i(u_texture, 0);
+
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture_id_skybox);
 	glDrawElements(GL_TRIANGLES, 3 * g_NumTriangles_skybox, GL_UNSIGNED_INT, 0);
@@ -248,6 +295,9 @@ void drawEarth() {
 	GLuint u_view = glGetUniformLocation(g_earthShader, "u_view");
 	GLuint u_projection = glGetUniformLocation(g_earthShader, "u_projection");
 	GLuint u_texture = glGetUniformLocation(g_earthShader, "u_texture");
+	GLuint u_texture_normal = glGetUniformLocation(g_earthShader, "u_texture_normal");
+	GLuint u_texture_spec = glGetUniformLocation(g_earthShader, "u_texture_spec");
+	GLuint u_texture_night = glGetUniformLocation(g_earthShader, "u_texture_night");
 	GLuint u_light_dir = glGetUniformLocation(g_earthShader, "u_light_dir");
 	GLuint u_cam_pos = glGetUniformLocation(g_earthShader, "u_cam_pos");
 	GLuint u_shininess = glGetUniformLocation(g_earthShader, "u_shininess");
@@ -266,6 +316,9 @@ void drawEarth() {
 	glUniformMatrix4fv(u_view, 1, GL_FALSE, value_ptr(view_matrix));
 	glUniformMatrix4fv(u_projection, 1, GL_FALSE, value_ptr(projection_matrix));
 	glUniform1i(u_texture, 0);
+	glUniform1i(u_texture_normal, 1);
+	glUniform1i(u_texture_spec, 2);
+	glUniform1i(u_texture_night, 3);
 	glUniform3f(u_light_dir, g_light_dir.x, g_light_dir.y, g_light_dir.z);
 	glUniform3f(u_diffuse, 1.0, 1.0, 1.0);
 	glUniform3f(u_specular, 1.0, 1.0, 1.0);
@@ -275,6 +328,15 @@ void drawEarth() {
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture_id_earth);
+
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, texture_id_earth_normal);
+
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, texture_id_earth_spec); 
+
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_2D, texture_id_earth_night);
 
 	glDrawElements(GL_TRIANGLES, 3 * g_NumTriangles_earth, GL_UNSIGNED_INT, 0);
 	gl_unbindVAO();
