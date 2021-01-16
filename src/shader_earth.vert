@@ -14,6 +14,7 @@ out vec3 v_color;
 uniform mat4 u_model;
 uniform mat4 u_projection;
 uniform mat4 u_view;
+uniform mat3 u_normal_matrix;
 
 
 void main()
@@ -28,7 +29,7 @@ void main()
 	v_uv = a_uv;
 
 	//pass normal values to fragment shader
-	v_normal = (a_normal * vec4( a_normal, 1.0 ).xyz);
+	v_normal = u_normal_matrix * a_normal; 
 
 	//pass vertex values to fragment shader
 	v_vertex = (u_model * vec4( a_vertex , 1.0 )).xyz;

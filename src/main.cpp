@@ -387,16 +387,18 @@ void drawEarth() {
 	GLuint u_model = glGetUniformLocation(g_earthShader, "u_model");
 	GLuint u_view = glGetUniformLocation(g_earthShader, "u_view");
 	GLuint u_projection = glGetUniformLocation(g_earthShader, "u_projection");
+	GLuint u_normal_matrix = glGetUniformLocation(g_earthShader, "u_normal_matrix");
 	GLuint u_texture = glGetUniformLocation(g_earthShader, "u_texture");
 	GLuint u_texture_normal = glGetUniformLocation(g_earthShader, "u_texture_normal");
 	GLuint u_texture_spec = glGetUniformLocation(g_earthShader, "u_texture_spec");
 	GLuint u_texture_night = glGetUniformLocation(g_earthShader, "u_texture_night");
 	GLuint u_light_dir = glGetUniformLocation(g_earthShader, "u_light_dir");
 	GLuint u_cam_pos = glGetUniformLocation(g_earthShader, "u_cam_pos");
-	GLuint u_shininess = glGetUniformLocation(g_earthShader, "u_shininess");
 	GLuint u_ambient = glGetUniformLocation(g_earthShader, "u_ambient");
 	GLuint u_diffuse = glGetUniformLocation(g_earthShader, "u_diffuse");
 	GLuint u_specular = glGetUniformLocation(g_earthShader, "u_specular");
+	GLuint u_shininess = glGetUniformLocation(g_earthShader, "u_shininess");
+
 
 	mat4 projection_matrix = perspective(
 		50.0f, // Field of view
@@ -413,6 +415,8 @@ void drawEarth() {
 	mat4 model_matrix = translate(mat4(1.0f), earthPosition) 
 		* scale(mat4(1.0f), vec3(0.15, 0.15, 0.15)) 
 		* rotate(mat4(1.0f), earth_rotation, vec3(0.0f, 1.0f, 0.0f));
+	mat3 normal_matrix = transpose(inverse(mat3(model_matrix)));
+
 
 	float light_x = g_light_distance * sinf(g_light_angle);
 	float light_z = g_light_distance * cosf(g_light_angle);
@@ -420,15 +424,16 @@ void drawEarth() {
 	glUniformMatrix4fv(u_model, 1, GL_FALSE, value_ptr(model_matrix));
 	glUniformMatrix4fv(u_view, 1, GL_FALSE, value_ptr(view_matrix));
 	glUniformMatrix4fv(u_projection, 1, GL_FALSE, value_ptr(projection_matrix));
+	glUniformMatrix3fv(u_normal_matrix, 1, GL_FALSE, value_ptr(normal_matrix));
 	glUniform1i(u_texture, 0);
 	glUniform1i(u_texture_normal, 1);
 	glUniform1i(u_texture_spec, 2);
 	glUniform1i(u_texture_night, 3);
-	glUniform3f(u_light_dir, g_light_dir.x, g_light_dir.y, g_light_dir.z);
+	glUniform3f(u_light_dir, g_light_dir.x - earthPosition.x, g_light_dir.y - earthPosition.y, g_light_dir.z - earthPosition.z);
 	glUniform3f(u_diffuse, 1.0, 1.0, 1.0);
 	glUniform3f(u_specular, 1.0, 1.0, 1.0);
 	glUniform3f(u_cam_pos, eye.x, eye.y, eye.z);
-	glUniform1f(u_shininess, 30.0);
+	glUniform1f(u_shininess, 50.0);
 	glUniform3f(u_ambient, 0.1, 0.1, 0.2);
 
 	glActiveTexture(GL_TEXTURE0);
