@@ -163,6 +163,7 @@
   <ItemGroup>
     <None Include="..\src\shader.frag" />
     <None Include="..\src\shader.vert" />
+    <None Include="..\src\shader_clouds.frag" />
     <None Include="..\src\shader_earth.frag" />
     <None Include="..\src\shader_earth.vert" />
     <None Include="..\src\shader_planet.frag" />

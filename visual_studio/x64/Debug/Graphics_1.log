@@ -1,41 +1,36 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(491,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (Graphics_1.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   main.cpp
-C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(35,60): warning C4305: 'initializing': truncation from 'double' to '_Ty'
-          with
-          [
-              _Ty=float
-          ]
 C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(36,62): warning C4305: 'initializing': truncation from 'double' to '_Ty'
           with
           [
               _Ty=float
           ]
-C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(140,4): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(143,61): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(149,4): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(152,65): warning C4267: '=': conversion from 'size_t' to 'GLuint', possible loss of data
-C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(187,31): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(189,115): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(192,27): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(195,31): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(199,63): warning C4267: '=': conversion from 'size_t' to 'GLuint', possible loss of data
-C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(278,138): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(279,136): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(280,134): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(281,105): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(285,52): warning C4267: '=': conversion from 'size_t' to 'GLuint', possible loss of data
-C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(310,54): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(311,41): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(317,34): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(318,38): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(437,38): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(502,41): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(648,57): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(649,59): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(652,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(653,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(664,41): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(665,24): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(143,4): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(146,61): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(152,4): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(155,65): warning C4267: '=': conversion from 'size_t' to 'GLuint', possible loss of data
+C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(193,31): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(195,115): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(198,27): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(201,31): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(205,63): warning C4267: '=': conversion from 'size_t' to 'GLuint', possible loss of data
+C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(293,138): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(294,136): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(295,134): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(296,105): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(300,52): warning C4267: '=': conversion from 'size_t' to 'GLuint', possible loss of data
+C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(325,54): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(326,41): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(332,34): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(333,38): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(452,38): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(566,41): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(712,57): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(713,59): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(716,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(717,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(728,41): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\src\main.cpp(729,24): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
   GLM: perspective function taking degrees as a parameter is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
   GLM: rotate function taking degrees as a parameter is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
   Graphics_1.vcxproj -> C:\Users\guill\OneDrive - La Salle\Desktop\La Salle\3rd Year\3D Computer Graphics\Project\SolarSystem\SolarSystem.exe

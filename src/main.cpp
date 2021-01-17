@@ -32,8 +32,8 @@ enum {
 	SUN, MERCURY, VENUS, MOON, MARS, JUPITER, SATURN, URANUS, NEPTUNE
 };
 
-vector<float> distances = {0, 1, 2, 0.4, 4, 13, 24, 49, 76 };
-vector<float> scales = {20, 0.6, 0.9, 0.6, 0.8, 11, 9, 4, 3.5};
+vector<float> distances = {0, 0, 1.5, 1, 6, 13, 24, 49, 76 };
+vector<float> scales = {20, 1.2, 1.8, 1.2, 1.6, 11, 9, 4, 3.5};
 vector<char*> textures = {"assets/sunmap.bmp", "assets/mercurymap.bmp", "assets/venusmap.bmp", "assets/moonmap.bmp", "assets/marsmap.bmp", "assets/jupitermap.bmp", "assets/saturnmap.bmp", "assets/uranusmap.bmp", "assets/neptunemap.bmp"};
 
 #define NUM_PLANETS 9
@@ -50,9 +50,10 @@ struct planet {
 
 vector<planet> planets;
 
-vec3 earthPosition(0.8 * 3, 0, 0);
+vec3 earthPosition(0.8 * 4, 0, 0);
 float earth_angle = 0.0f;
 float earth_rotation = 0.0f;
+float clouds_rotation = 0.0f;
 
 string basepath = "assets/";
 string inputfile = basepath + "sphere.obj";
@@ -76,6 +77,7 @@ GLuint g_planetShader = 0; //shader identifier
 GLuint g_skyboxShader = 0; //skybox shader identifier
 GLuint g_earthShader = 0; //earth shader identifier
 GLuint g_sunShader = 0; //sun shader identifier
+GLuint g_cloudsShader = 0; // clouds shader identifier
 
 GLuint g_Vao = 0; //vao
 GLuint g_Vao_skybox = 0; //vao for skybox
@@ -93,7 +95,7 @@ float last_mouse_y = 0.0f;
 
 bool is_down = false;
 vec3 center = vec3(0.0f, 0.0f, 0.0f);
-vec3 eye = vec3(0.0f, 1.0f, 1.0f);
+vec3 eye = vec3(0.0f, 4.0f, 20.0f);
 
 float cam_yaw = 0.0f;
 float cam_pitch = 0.0f;
@@ -112,6 +114,7 @@ GLuint texture_id_earth;
 GLuint texture_id_earth_normal;
 GLuint texture_id_earth_spec;
 GLuint texture_id_earth_night;
+GLuint texture_id_clouds;
 
 
 //global light source vector
@@ -180,6 +183,9 @@ void loadEarth() {
 
 	Shader earthShader("src/shader_earth.vert", "src/shader_earth.frag");
 	g_earthShader = earthShader.program;
+
+	Shader cloudsShader("src/shader.vert", "src/shader_clouds.frag");
+	g_cloudsShader = cloudsShader.program;
 
 	g_Vao_earth = gl_createAndBindVAO();
 
@@ -257,6 +263,15 @@ void loadEarth() {
 		GL_RGB, // format of original data
 		GL_UNSIGNED_BYTE, // type of data
 		image_night->pixels); // pointer to the start of data
+
+	Image* image_clouds = loadBMP("assets/clouds.bmp");
+
+	glGenTextures(1, &texture_id_clouds);
+	glBindTexture(GL_TEXTURE_2D, texture_id_clouds);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image_clouds->width, image_clouds->height, 0, GL_RGB,
+		GL_UNSIGNED_BYTE, image_clouds->pixels);
+
 }
 
 void loadPlanets() {
@@ -413,7 +428,7 @@ void drawEarth() {
 		vec3(0.0, 1.0, 0.0) // probably glm::vec3(0,1,0)
 	);
 	mat4 model_matrix = translate(mat4(1.0f), earthPosition) 
-		* scale(mat4(1.0f), vec3(0.15, 0.15, 0.15)) 
+		* scale(mat4(1.0f), vec3(0.45, 0.45, 0.45)) 
 		* rotate(mat4(1.0f), earth_rotation, vec3(0.0f, 1.0f, 0.0f));
 	mat3 normal_matrix = transpose(inverse(mat3(model_matrix)));
 
@@ -449,8 +464,57 @@ void drawEarth() {
 	glBindTexture(GL_TEXTURE_2D, texture_id_earth_night);
 
 	glDrawElements(GL_TRIANGLES, 3 * g_NumTriangles_earth, GL_UNSIGNED_INT, 0);
-	gl_unbindVAO();
 
+	
+	//				Clouds
+
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	glUseProgram(g_cloudsShader);
+
+	GLuint projection_loc = glGetUniformLocation(g_cloudsShader, "u_projection");
+	GLuint view_loc = glGetUniformLocation(g_cloudsShader, "u_view");
+	GLuint model_loc = glGetUniformLocation(g_cloudsShader, "u_model");
+	//GLuint cu_normal_matrix = glGetUniformLocation(g_earthShader, "u_normal_matrix");
+	GLuint transparency_loc = glGetUniformLocation(g_cloudsShader, "u_transparency");
+	GLuint texture = glGetUniformLocation(g_cloudsShader, "u_texture");
+
+	mat4 c_projection_matrix = perspective(
+		50.0f, // Field of view
+		1.0f, // Aspect ratio
+		0.1f, // near plane (distance from camera)
+		600.0f // Far plane (distance from camera)
+	);
+
+	mat4 c_view_matrix = glm::lookAt(
+		eye, // the position of your camera, in world space
+		center, // where you want to look at, in world space
+		vec3(0.0, 1.0, 0.0) // probably glm::vec3(0,1,0)
+	);
+
+	mat4 c_model_matrix = translate(mat4(1.0f), earthPosition)
+		* scale(mat4(1.0f), vec3(0.46, 0.46, 0.46))
+		* rotate(mat4(1.0f), clouds_rotation, vec3(0.0f, 1.0f, 0.0f));
+
+	mat3 c_normal_matrix = transpose(inverse(mat3(c_model_matrix)));
+
+
+	glUniformMatrix4fv(projection_loc, 1, GL_FALSE, value_ptr(c_projection_matrix));
+	glUniformMatrix4fv(view_loc, 1, GL_FALSE, value_ptr(c_view_matrix));
+	glUniformMatrix4fv(model_loc, 1, GL_FALSE, value_ptr(c_model_matrix));
+	//glUniformMatrix3fv(cu_normal_matrix, 1, GL_FALSE, value_ptr(c_normal_matrix));
+	glUniform1f(transparency_loc, 0.4f);
+	glUniform1i(texture, 0);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture_id_clouds);
+
+	glDrawElements(GL_TRIANGLES, 3 * g_NumTriangles, GL_UNSIGNED_INT, 0);
+	glDisable(GL_BLEND);
+
+	gl_unbindVAO();
 }
 
 void drawPlanets() {
@@ -683,13 +747,16 @@ void update() {
 		if (planets[i].rotation > 6.28f) planets[i].rotation = 0.0f;
 	}
 
-	earth_angle -= 0.2 * 0.0001f;
+	earth_angle -= 0.2 * 0.001f;
 	earthPosition.x = cos(earth_angle) * (3 + 10.0f);
 	earthPosition.z = sin(earth_angle) * (3 + 10.0f);
 
 	//Rotation
 	earth_rotation -= 0.003f * deltaTime;
 	if (earth_rotation > 6.28f) earth_rotation = 0.0f;
+
+	clouds_rotation -= 0.001f * deltaTime;;
+	if (clouds_rotation > 6.28f) clouds_rotation = 0;
 
 	//reset camera to look down z-axis
 	vec3 initial_look_vector = vec3(0, 0, -1);

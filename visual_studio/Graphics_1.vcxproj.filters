@@ -76,5 +76,8 @@
     <None Include="..\src\shader_sun.vert">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="..\src\shader_clouds.frag">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
